@@ -1,15 +1,30 @@
 import tkinter as tk
 from tkinter import *
+#import pygame
 import time
 import tkinter.messagebox
 import threading
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
 root=Tk()
 root.title("Tank Simulator")
 root.configure(bg="powder blue")
 root.resizable(width=False,height=False)
 root.geometry("1920x1080")
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(40,GPIO.IN)
+GPIO.setup(38,GPIO.IN)
+GPIO.setup(36,GPIO.IN)
+
+
+
+#pygame.mixer.init()
+
+#def play():
+    #pygame.mixer.music.load(
+
+
 
 def entrybox(l1,l2,l3,m1,min):
     sec = StringVar()
@@ -30,7 +45,6 @@ def entrybox(l1,l2,l3,m1,min):
 e1=entrybox(80,50,20,120,15)
 e2=entrybox(220,190,160,120,10)
 e3=entrybox(360,330,300,120,5)
-
 
 calc = Frame(root)
 calc.grid()
@@ -87,13 +101,30 @@ def gogreen(t):
     print("here")
     t.config(bg="#00ff00")
 
+def checkloop(t,pin,e1,e2,e3):
+    b=False
+    while True:
+        if GPIO.input(pin) == 1:
+            if b== False :
+                gogreen(t)
+                #labelText.set("on")
+                print ("on")
+                countdowntimer(e1,e2,e3)
+                b = True
+            else:
+#               labelText.set("off")
+                print ("off")
+                b = False
+            while GPIO.input(pin) == 1: pass
 
-# timer1 = threading.Thread(target=countdowntimer(e1[0],e1[1],e1[2])).start()
 Startbutton = Button(root, text='START_1', bd ='2', bg = 'IndianRed1',font =('Helvetica bold',10), command = lambda:[gogreen(t1),threading.Thread(target=countdowntimer, args=(e1[0],e1[1],e1[2])).start()]).place(x=20, y=180)
 Startbutton2 = Button(root, text='START_2', bd ='2', bg = 'IndianRed1',font =('Helvetica bold',10), command = lambda:[gogreen(t2),threading.Thread(target=countdowntimer, args=(e2[0],e2[1],e2[2])).start()]).place(x=160, y=180)
 Startbutton3 = Button(root, text='START_3', bd ='2', bg = 'IndianRed1',font =('Helvetica bold',10), command = lambda:[gogreen(t3),threading.Thread(target=countdowntimer, args=(e3[0],e3[1],e3[2])).start()]).place(x=300, y=180)
 Exitbutton = Button(root, text="Exit",bg="red", command=root.destroy).place(x=1750, y=0)
 
+threading.Thread(target=checkloop,args=(t1,40,e1[0],e1[1],e1[2])).start()
+threading.Thread(target=checkloop,args=(t2,38,e2[0],e2[1],e2[2])).start()
+threading.Thread(target=checkloop,args=(t3,36,e3[0],e3[1],e3[2])).start()
 #pack
 #t1.pack()
 #t2.pack()
