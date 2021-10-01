@@ -2,8 +2,8 @@ import tkinter as tk
 from tkinter import *
 import time
 import tkinter.messagebox
-from threading import Thread
-import RPi.GPIO as GPIO
+import threading
+# import RPi.GPIO as GPIO
 
 root=Tk()
 root.title("Tank Simulator")
@@ -88,10 +88,10 @@ def gogreen(t):
     t.config(bg="#00ff00")
 
 
-
-Startbutton = Button(root, text='START_1', bd ='2', bg = 'IndianRed1',font =('Helvetica bold',10), command = lambda:[gogreen(t1),countdowntimer(e1[0],e1[1],e1[2])]).place(x=20, y=180)
-Startbutton2 = Button(root, text='START_2', bd ='2', bg = 'IndianRed1',font =('Helvetica bold',10), command = lambda:[gogreen(t2),countdowntimer(e2[0],e2[1],e2[2])]).place(x=160, y=180)
-Startbutton3 = Button(root, text='START_3', bd ='2', bg = 'IndianRed1',font =('Helvetica bold',10), command = lambda:[gogreen(t3),countdowntimer(e3[0],e3[1],e3[2])]).place(x=300, y=180)
+# timer1 = threading.Thread(target=countdowntimer(e1[0],e1[1],e1[2])).start()
+Startbutton = Button(root, text='START_1', bd ='2', bg = 'IndianRed1',font =('Helvetica bold',10), command = lambda:[gogreen(t1),threading.Thread(target=countdowntimer, args=(e1[0],e1[1],e1[2])).start()]).place(x=20, y=180)
+Startbutton2 = Button(root, text='START_2', bd ='2', bg = 'IndianRed1',font =('Helvetica bold',10), command = lambda:[gogreen(t2),threading.Thread(target=countdowntimer, args=(e2[0],e2[1],e2[2])).start()]).place(x=160, y=180)
+Startbutton3 = Button(root, text='START_3', bd ='2', bg = 'IndianRed1',font =('Helvetica bold',10), command = lambda:[gogreen(t3),threading.Thread(target=countdowntimer, args=(e3[0],e3[1],e3[2])).start()]).place(x=300, y=180)
 Exitbutton = Button(root, text="Exit",bg="red", command=root.destroy).place(x=1750, y=0)
 
 #pack
